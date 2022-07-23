@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useContext} from 'react'
 import { collection, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
-import { firestore } from '../../Config/Firebase';
+import { firestore } from '../../config/Firebase';
 import { ToastContainer, toast } from "react-toastify";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { AuthContext } from '../../context/AuthContext';
+
+
 
 import "react-toastify/dist/ReactToastify.css";
+ 
 
 export default function ReadProducts() {
-
+    
     const [products, setProducts] = useState([])
     const [productForEdit, setProductForEdit] = useState({})
+    AOS.init();
+    const { user } = useContext(AuthContext);
+    
 
     const handleChange = e => {
         setProductForEdit({ ...productForEdit, [e.target.name]: e.target.value })
@@ -17,15 +26,25 @@ export default function ReadProducts() {
     const fetchDocuments = async () => {
 
         let array = []
+        // const {createdBy} = FormData
+        // const {uid} = createdBy
 
         const querySnapshot = await getDocs(collection(firestore, "products"));
         querySnapshot.forEach((doc) => {
             let data = doc.data()
             data.id = doc.id
-            // console.log(data)
-            array.push(data)
+            // console.log(FormData.uid)
+            // console.log(user.uid)
+            
 
-            // console.log(`${doc.id} => ${doc.data()}`);
+            //  if (createdBy.uid === user.id) 
+            //      { return  }
+            //  else {
+            //     array.push()
+        
+            array.push(data)
+            
+          
         });
 
         setProducts(array)
@@ -99,7 +118,7 @@ export default function ReadProducts() {
                             <div className="col">
                                 <h1 className="text-primary text-center"><b>Products</b></h1>
                                 <hr />
-                                {products.length > 0
+                                {products.length >= 0
                                     ? <div className="table-responsive">
                                         <table className="table table-light table-striped">
                                             <thead>
@@ -128,7 +147,14 @@ export default function ReadProducts() {
                                             </tbody>
                                         </table>
                                     </div>
-                                    : <div className='text-center'><div className="spinner-border text-white"></div></div>
+                                    : (
+                                        <div className="row">
+                                          <div className="col text-center">
+                                            <div class="spinner-border text-info" role="status">
+                                              <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                          </div>
+                                        </div>)
                                 }
 
 
@@ -141,7 +167,7 @@ export default function ReadProducts() {
             </main >
 
             {/* <!-- Modal --> */}
-            <div className="modal fade" id="editModal">
+            <div className="modal fade" id="editModal" data-aos="zoom-in">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header text-center">

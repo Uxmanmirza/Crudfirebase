@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState , useContext } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { firestore } from "../../Config/Firebase";
+import { firestore } from "../../config/Firebase";
 import { ToastContainer, toast } from "react-toastify";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import {AuthContext} from "../../context/AuthContext"
 
 import "react-toastify/dist/ReactToastify.css";
+ 
 
 const initialState = { title: "", description: "", price: "" };
 
 export default function AddProduct() {
   const [state, setState] = useState(initialState);
   const [loading, setLoading] = useState(false);
-
+  AOS.init();
+  const { user } = useContext(AuthContext);
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -40,6 +45,14 @@ export default function AddProduct() {
     }
 
     let formData = { title, description, price };
+    formData.createdBy = {
+      email: user.email,
+      uid: user.uid
+    }
+
+    // const formData2 = {...formData}
+
+    // const {createdBy} = formData;
 
     setLoading(true);
     try {
@@ -73,7 +86,7 @@ export default function AddProduct() {
   return (
     <>
       <main>
-        <div className="py-5 w-100">
+        <div className="py-5 w-100"  data-aos="flip-up"  data-aos-duration="1500" data-aos-easing="linear">
           <div className="container">
             <div className="row">
               <div className="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
