@@ -1,10 +1,9 @@
-import React, { useEffect, useState , useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { auth } from "../../config/Firebase";
-import {Link , useNavigate} from "react-router-dom"
-import { ToastContainer, toast } from 'react-toastify';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
- 
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 import {
   getAuth,
@@ -14,33 +13,24 @@ import {
 import { AuthContext } from "../../context/AuthContext";
 const initials = { email: "", password: "" };
 
-
-
 export default function Register() {
-  const { dispatch } = useContext(AuthContext)
+  const { dispatch } = useContext(AuthContext);
 
-const navigate = useNavigate();
-AOS.init();
+  const navigate = useNavigate();
+  AOS.init();
   const [state, setState] = useState(initials);
   const [user, setUser] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
-  console.log(user)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        
         setUser(user);
-        console.log(user);
-
       } else {
         console.error("error");
-        
       }
     });
   }, []);
-
-  // setUser(user);
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -48,41 +38,38 @@ AOS.init();
 
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log(state);
+
     const { email, password } = state;
     setIsProcessing(true);
     const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        
-        let user = userCredential.user;
-        console.log(user)
-       
-        console.log("user has been created");
-        toast.success("User has been Registered", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+
+    try {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          let user = userCredential.user;
+
+          toast.success("User has been Registered", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
           });
 
-        setIsProcessing(false);
-       
-        navigate("/authentication/login");
-        dispatch({type: "LOGIN"}
-       
-        )
-      })
-      .catch((error) => {
-        console.error(error);
-        
-      });
+          setIsProcessing(false);
 
+          navigate("/authentication/login");
+          dispatch({ type: "LOGIN" });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
-
 
   return (
     <main>
@@ -131,23 +118,28 @@ AOS.init();
                         </button>
                       </div>
                     </div>
-                     
                   </div>
                 </form>
 
-
                 <div className="row">
-                <div className="col">
-                <p className="mb-0 text-center">Already have an Account <Link to="/authentication/login" className="btn btn-link text-dark">Login</Link></p>
+                  <div className="col">
+                    <p className="mb-0 text-center">
+                      Already have an Account{" "}
+                      <Link
+                        to="/authentication/login"
+                        className="btn btn-link text-dark"
+                      >
+                        Login
+                      </Link>
+                    </p>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </main>
   );
 }
-

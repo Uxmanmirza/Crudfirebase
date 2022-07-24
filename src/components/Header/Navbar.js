@@ -3,18 +3,10 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../../config/Firebase";
+import img2 from "../../asserts/img-2.png";
 
 export default function Navbar() {
   const { isAuthenticated, dispatch } = useContext(AuthContext);
-
-  // const { isAuthenticated } = authentication;
-
-  // console.log(isAuthenticated);
-  // console.log(dispatch);
-
-  // const navigate = useNavigate()
-
-  // navigate("/")
 
   const handleLogout = () => {
     signOut(auth)
@@ -22,15 +14,13 @@ export default function Navbar() {
         dispatch({ type: "LOGOUT" });
       })
       .catch((e) => console.error(e));
-
-    // alert("Logout");
   };
   return (
     <header>
       <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
         <div className="container">
-          <Link to="/" className="navbar-brand text-icon ">
-            <b>CRUD</b>
+          <Link to="/" className="navbar-brand text-icon">
+            <img src={img2} alt="CRUD" />
           </Link>
           <button
             className="navbar-toggler"
@@ -48,7 +38,7 @@ export default function Navbar() {
               {isAuthenticated ? (
                 <>
                   {" "}
-                  <li className="nav-item">
+                  <li className="nav-item" data-aos="fade-right">
                     <Link
                       to="/"
                       className="nav-link active"
@@ -57,19 +47,19 @@ export default function Navbar() {
                       Home
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item" data-aos="fade-right">
                     <Link to="/readProduct" className="nav-link">
                       ReadProduct
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item" data-aos="fade-right">
                     <Link to="/addProduct" className="nav-link">
                       AddProduct
                     </Link>
                   </li>
                 </>
               ) : (
-                <li className="nav-item">
+                <li className="nav-item" data-aos="fade-right">
                   <Link to="/" className="nav-link active" aria-current="page">
                     Home
                   </Link>
@@ -80,8 +70,9 @@ export default function Navbar() {
               {!isAuthenticated ? (
                 <Link
                   to="/Authentication/login"
-                  className="btn btn-primary me-2"
+                  className="btn btn-primary me-2 btn-md"
                   type="submit"
+                  data-aos="fade-left"
                 >
                   Login
                 </Link>
@@ -89,14 +80,15 @@ export default function Navbar() {
                 <>
                   <Link
                     to="/Authentication/login"
-                    className="btn btn-primary me-2"
+                    className="btn btn-primary me-2 btn-md"
                     type="submit"
+                    data-aos="fade-left"
                   >
                     Login
                   </Link>
                   <Link
                     to="/Authentication/login"
-                    className="btn btn-danger btn-sm"
+                    className="btn btn-danger btn-md"
                     type="submit"
                     onClick={handleLogout}
                   >

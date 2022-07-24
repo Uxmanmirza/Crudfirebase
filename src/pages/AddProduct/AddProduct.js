@@ -1,13 +1,12 @@
-import React, { useState , useContext } from "react";
+import React, { useState, useContext } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../config/Firebase";
 import { ToastContainer, toast } from "react-toastify";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-import {AuthContext} from "../../context/AuthContext"
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { AuthContext } from "../../context/AuthContext";
 
 import "react-toastify/dist/ReactToastify.css";
- 
 
 const initialState = { title: "", description: "", price: "" };
 
@@ -23,7 +22,7 @@ export default function AddProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(state);
+     
 
     let { title, description, price } = state;
 
@@ -31,7 +30,7 @@ export default function AddProduct() {
     description = description.trim();
     price = Number(price);
 
-    if (title.length < 3) {
+    if (title.length < 5) {
       alert("Title ki length km hai");
       return;
     }
@@ -47,17 +46,15 @@ export default function AddProduct() {
     let formData = { title, description, price };
     formData.createdBy = {
       email: user.email,
-      uid: user.uid
-    }
-
-    // const formData2 = {...formData}
-
-    // const {createdBy} = formData;
+      uid: user.uid,
+    };
 
     setLoading(true);
     try {
       const docRef = await addDoc(collection(firestore, "products"), formData);
-      console.log("Doucment ID: ", docRef.id);
+
+      let DocumentID = docRef.id;
+
       toast.success("User Has Been Added", {
         position: "top-center",
         autoClose: 3000,
@@ -86,7 +83,12 @@ export default function AddProduct() {
   return (
     <>
       <main>
-        <div className="py-5 w-100"  data-aos="flip-up"  data-aos-duration="1500" data-aos-easing="linear">
+        <div
+          className="py-5 w-100"
+          data-aos="flip-up"
+          data-aos-duration="1500"
+          data-aos-easing="linear"
+        >
           <div className="container">
             <div className="row">
               <div className="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
@@ -143,7 +145,7 @@ export default function AddProduct() {
                       <div className="row">
                         <div className="col text-center">
                           <button className="btn btn-outline-danger w-50 text-center">
-                            Add User
+                            Add Product
                           </button>
                         </div>
                       </div>

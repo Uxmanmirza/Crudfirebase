@@ -16,7 +16,7 @@ const firebaseConfig = {
   storageBucket: "my-todo-1234.appspot.com",
   messagingSenderId: "948802509595",
   appId: "1:948802509595:web:6d8fabb957675a17c291be",
-  measurementId: "G-QJL3MYYDJL"
+  measurementId: "G-QJL3MYYDJL",
 };
 
 // Initialize Firebase
@@ -25,4 +25,4 @@ const analytics = getAnalytics(app);
 const firestore = getFirestore(app);
 const auth = getAuth(app);
 
-export { analytics, firestore , auth}
+export { analytics, firestore, auth };

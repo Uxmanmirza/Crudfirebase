@@ -4,8 +4,7 @@ import Login from "../Authentication/Login";
 
 export default function PrivateRoutes(props) {
   const { isAuthenticated } = useContext(AuthContext);
-  //   const { isAuthenticated } = authentication;
-  //   console.log(user);
+
   const { Component } = props;
 
   if (!isAuthenticated) return <Login />;

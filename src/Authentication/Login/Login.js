@@ -1,46 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { auth  , } from "../../config/Firebase";
-import { Link , useNavigate} from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-
-
+import { auth } from "../../config/Firebase";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 import {
   getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  
 } from "firebase/auth";
 
 const initials = { email: "", password: "" };
 
 export default function Login() {
-  
-   
-
-  
-
-
-
-AOS.init();
+  AOS.init();
   const [state, setState] = useState(initials);
   const [user, setUser] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
-  console.log(user)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        
-        console.log(user);
-
         setUser(user);
       } else {
         console.error("error");
-         
       }
     });
   }, []);
@@ -51,42 +36,37 @@ AOS.init();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(state);
+
     setIsProcessing(true);
-    const { email, password } = state;
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-         
-        const user = userCredential.user;
-        
-        setIsProcessing(false);
-        toast.success("User has been Sign-in", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+
+    try {
+      const { email, password } = state;
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          toast.success("User has been Sign-in", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
           });
-        console.log(user)
-        navigate("/")
-        
-        console.log("User has been log in ");
+          setIsProcessing(false);
 
-        
-      })
-      .catch((error) => {
-        console.error(error);
-         
-      }).finally(()=>{
-
-      });
-
+          navigate("/");
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {});
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  
 
   return (
     <main>
@@ -154,9 +134,8 @@ AOS.init();
             </div>
           </div>
         </div>
-        <ToastContainer/>
+        <ToastContainer />
       </div>
-      </main>
+    </main>
   );
 }
-
