@@ -8,6 +8,7 @@ import Authentication from "../Authentication";
 import AddProduct from "./AddProduct";
 import ReadProduct from "./ReadProduct";
 import PrivateRoutes from "../important/PrivateRoutes";
+import Nopage from "../Nopage";
 
 export default function index() {
   return (
@@ -20,6 +21,7 @@ export default function index() {
             <Route path="addProduct" element={<AddProduct />} />
             <Route path="readProduct" element={<ReadProduct />} />
             <Route path="/authentication/*" element={<Authentication />} />
+            <Route path="*" element={<Nopage/>}/>
           </Routes>
         </main>
         <Footer />
